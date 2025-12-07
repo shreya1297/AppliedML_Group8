@@ -9,9 +9,9 @@ import torch
 # STEP 1: LOAD CSV FILES
 # ============================================================
 
-train_df = pd.read_csv("../train.csv")
-test_df = pd.read_csv("../test.csv")
-sample_sub = pd.read_csv("../sample_submission.csv")
+train_df = pd.read_csv("../../data/train.csv")
+test_df = pd.read_csv("../../data/test.csv")
+sample_sub = pd.read_csv("../../data/sample_submission.csv")
 
 # Convert answers string → list
 train_df["answers"] = train_df["answers"].apply(ast.literal_eval)
@@ -136,6 +136,6 @@ test_df["label"] = preds
 
 submission = sample_sub.copy()
 submission["label"] = preds
-submission.to_csv("submission.csv", index=False)
+submission.to_csv("../../submission/submission.csv", index=False)
 
 print("Submission file saved as submission.csv")

@@ -33,7 +33,7 @@ def load_data(file_path):
     return df
 
 # Load data
-df = load_data('../train.csv')
+df = load_data('../../data/train.csv')
 
 # Create a Hugging Face Dataset
 full_dataset = Dataset.from_pandas(df)

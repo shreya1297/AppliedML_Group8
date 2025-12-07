@@ -6,9 +6,9 @@ from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForMultipleChoice, TrainingArguments, Trainer
 
 # --- Configuration ---
-TEST_FILE = "../test.csv"
+TEST_FILE = "../../data/test.csv"
 MODEL_PATH = "./results/checkpoint-464"  # Path to your saved model folder
-OUTPUT_FILE = "submission.csv"
+OUTPUT_FILE = "../../submission/submission.csv"
 
 # --- 1. Load Data ---
 print(f"Loading {TEST_FILE}...")
