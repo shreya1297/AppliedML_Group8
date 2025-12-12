@@ -55,6 +55,14 @@ def preprocess_mc_batch(batch, tokenizer, max_length=256):
         max_length=max_length,
     )
 
+    # TODO: CHECK
+    # RoBERTa does not use token_type_ids (segment embeddings).
+    # Some tokenizers still return this field for API consistency.
+    # HF models safely ignore it, but our custom models (LSTM / Transformer)
+    # may NOT accept unexpected inputs. Therefore we remove it here.
+    if "token_type_ids" in tokenized:
+        del tokenized["token_type_ids"]
+            
     # Unflatten back to shape: [batch_size, 4, seq_len]
     result = {
         key: [val[i:i+4] for i in range(0, len(val), 4)]
