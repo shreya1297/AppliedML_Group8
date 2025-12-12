@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForMultipleChoice, TrainingArgu
 
 # --- Configuration ---
 TEST_FILE = "../test.csv"
-MODEL_PATH = "./results/checkpoint-464"  # Path to your saved model folder
+MODEL_PATH = "./results/checkpoint-696"  # Path to your saved model folder
 OUTPUT_FILE = "submission.csv"
 
 # --- 1. Load Data ---
