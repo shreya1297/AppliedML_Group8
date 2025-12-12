@@ -1,0 +1,21 @@
+SimpleAverageModel:
+A trivial baseline that always predicts the most frequent label in the training set.
+Used to test the end-to-end ML pipeline (data loading, preprocessing, batching, evaluation, submission).
+
+This model performs no training and simply predicts the most common label from the training dataset for every example.
+Validation Accuracy: 0.2522
+
+Submission columns:
+- id: taken directly from test.csv
+- label: model predictions (constant = most common label)
+
+Example:
+id,label
+test_0,1
+test_1,1
+...
+
+- This model does not use any training.
+- Logits are manually constructed to prioritize one label.
+- Accuracy is expected to be low but helps verify pipeline correctness.
+

@@ -9,9 +9,9 @@ import torch
 # STEP 1: LOAD CSV FILES
 # ============================================================
 
-train_df = pd.read_csv("../train.csv")
-test_df = pd.read_csv("../test.csv")
-sample_sub = pd.read_csv("../sample_submission.csv")
+train_df = pd.read_csv("../../data/train.csv")
+test_df = pd.read_csv("../../data/test.csv")
+sample_sub = pd.read_csv("../../data/sample_submission.csv")
 
 # Convert answers string → list
 train_df["answers"] = train_df["answers"].apply(ast.literal_eval)
@@ -90,9 +90,11 @@ model = AutoModelForMultipleChoice.from_pretrained(model_name)
 # STEP 5: TRAINING CONFIG
 # ============================================================
 
+# Hugging Face uses `evaluation_strategy` (not `eval_strategy`); the shorter
+# version is ignored by Trainer, so evaluation wasn't running each epoch.
 args = TrainingArguments(
     output_dir="output",
-    eval_strategy="epoch",
+    evaluation_strategy="epoch"
     learning_rate=1e-5,
     per_device_train_batch_size=2,
     per_device_eval_batch_size=2,
@@ -136,6 +138,6 @@ test_df["label"] = preds
 
 submission = sample_sub.copy()
 submission["label"] = preds
-submission.to_csv("submission.csv", index=False)
+submission.to_csv("../../submission/submission.csv", index=False)
 
 print("Submission file saved as submission.csv")

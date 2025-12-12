@@ -1,3 +1,7 @@
 .venv/
-/trial_1/__pycache__/
-/trial_1/results/
+
+__pycache__/
+
+results/
+
+.DS_Store
