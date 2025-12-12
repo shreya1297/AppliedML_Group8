@@ -6,7 +6,7 @@ from datasets import Dataset
 from transformers import (
     AutoTokenizer, 
     AutoModelForMultipleChoice, 
-    TrainingArguments, 
+    TrainingArguments,
     Trainer
 )
 
