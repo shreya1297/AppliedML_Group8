@@ -17,6 +17,8 @@ Important note:
 import math
 import torch
 import torch.nn as nn
+from typing import Optional
+
 
 
 class MultiHeadSelfAttention(nn.Module):
@@ -45,7 +47,7 @@ class MultiHeadSelfAttention(nn.Module):
 
         self.drop = nn.Dropout(dropout)
 
-    def forward(self, x: torch.Tensor, attn_mask: torch.Tensor | None = None) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, attn_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         x:        [B, L, D]
         attn_mask:[B, L] where 1 = real token, 0 = padding token
@@ -112,7 +114,7 @@ class TransformerEncoderBlock(nn.Module):
         self.norm2 = nn.LayerNorm(d_model)
         self.drop2 = nn.Dropout(dropout)
 
-    def forward(self, x: torch.Tensor, attn_mask: torch.Tensor | None = None) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, attn_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         # Attention sub-layer with residual connection
         x = self.norm1(x + self.drop1(self.attn(x, attn_mask)))
 
