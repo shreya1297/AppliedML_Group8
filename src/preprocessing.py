@@ -13,13 +13,30 @@ def load_data(path: str) -> pd.DataFrame:
     return df
 
 
-def split_dataset(df: pd.DataFrame, test_size: float = 0.1):
-    """
-    Convert DataFrame to HuggingFace Dataset and create train/validation split.
-    """
-    hf_dataset = Dataset.from_pandas(df)
-    split = hf_dataset.train_test_split(test_size=test_size)
-    return split["train"], split["test"]
+#def split_dataset(df: pd.DataFrame, test_size: float = 0.1):
+#    """
+#    Convert DataFrame to HuggingFace Dataset and create train/validation split.
+#    """
+#    hf_dataset = Dataset.from_pandas(df)
+#    split = hf_dataset.train_test_split(test_size=test_size)
+#    return split["train"], split["test"]
+
+'''
+Because the dataset labels correspond to the correct answer index (0–3), and these labels are often imbalanced, using a stratified train/validation split is essential.
+Stratification ensures that each label appears in the validation set with the same proportion as in the full dataset.
+Without stratification, the validation set may become skewed toward easier labels, leading to misleading accuracy estimates, unfair model comparisons, unstable hyperparameter tuning results, and unreliable seed stability analysis.
+Therefore, we use a stratified split (based on the label column) to guarantee that validation metrics reflect the true performance of the model.
+'''
+from sklearn.model_selection import train_test_split
+
+def split_dataset(df, test_size=0.1):
+    train_df, val_df = train_test_split(
+        df,
+        test_size=test_size,
+        random_state=42,
+        stratify=df["label"]
+    )
+    return Dataset.from_pandas(train_df), Dataset.from_pandas(val_df)
 
 
 def preprocess_mc_batch(batch, tokenizer, max_length=256):
