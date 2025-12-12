@@ -39,9 +39,25 @@ df = load_data('../../data/train.csv')
 full_dataset = Dataset.from_pandas(df)
 
 # Split into Train (80%) and Validation (20%) to measure accuracy
-dataset_split = full_dataset.train_test_split(test_size=0.2)
-train_dataset = dataset_split["train"]
-eval_dataset = dataset_split["test"]
+# dataset_split = full_dataset.train_test_split(test_size=0.2)
+# train_dataset = dataset_split["train"]
+# eval_dataset = dataset_split["test"]
+
+# previous split is NOT stratified by label, meaning label imbalance can occur. new split helps eliminate the bias in cases where for example option a is the majority selection.
+from sklearn.model_selection import train_test_split
+
+df = load_data('data/train.csv')
+
+train_df, val_df = train_test_split(
+    df,
+    test_size=0.2,
+    random_state=42,
+    stratify=df["label"],
+)
+
+train_dataset = Dataset.from_pandas(train_df.reset_index(drop=True))
+eval_dataset  = Dataset.from_pandas(val_df.reset_index(drop=True))
+
 
 # --- 2. Tokenization ---
 # We use DeBERTa-v3-base for a good balance of speed and performance. 
@@ -95,9 +111,11 @@ model = AutoModelForMultipleChoice.from_pretrained(model_checkpoint)
 # CRITICAL FIX: Disable cache to prevent "backward through graph" error
 model.config.use_cache = False 
 
+# Hugging Face uses `evaluation_strategy` (not `eval_strategy`); the shorter
+# version is ignored by Trainer, so evaluation wasn't running each epoch.
 training_args = TrainingArguments(
     output_dir="./results",
-    eval_strategy="epoch",
+    evaluation_strategy="epoch",
     save_strategy="epoch",
     learning_rate=2e-5,
     

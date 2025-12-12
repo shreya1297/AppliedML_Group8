@@ -90,9 +90,11 @@ model = AutoModelForMultipleChoice.from_pretrained(model_name)
 # STEP 5: TRAINING CONFIG
 # ============================================================
 
+# Hugging Face uses `evaluation_strategy` (not `eval_strategy`); the shorter
+# version is ignored by Trainer, so evaluation wasn't running each epoch.
 args = TrainingArguments(
     output_dir="output",
-    eval_strategy="epoch",
+    evaluation_strategy="epoch"
     learning_rate=1e-5,
     per_device_train_batch_size=2,
     per_device_eval_batch_size=2,
