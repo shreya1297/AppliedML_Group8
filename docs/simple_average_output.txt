@@ -3,7 +3,7 @@ A trivial baseline that always predicts the most frequent label in the training 
 Used to test the end-to-end ML pipeline (data loading, preprocessing, batching, evaluation, submission).
 
 This model performs no training and simply predicts the most common label from the training dataset for every example.
-Validation Accuracy: 0.2349
+Validation Accuracy: 0.2522
 
 Submission columns:
 - id: taken directly from test.csv
