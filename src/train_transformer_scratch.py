@@ -219,39 +219,7 @@ def write_submission(best_path: str, vocab: TrainOnlyVocab, device: str, out_csv
     sub.to_csv(out_csv, index=False)
     print("Saved submission ->", os.path.abspath(out_csv))
 
-
-def main():
-    # ---- Small ablation set 
-    configs = [
-        {
-            "name": "base_cls",
-            "num_layers": 4,
-            "nhead": 8,
-            "dim_ff": 1024,
-            "dropout": 0.1,
-            "lr": 2e-4,
-            "max_len": EMBED_MAX_LEN,
-            "pooling": "cls",
-            "batch_size": 16,
-            "epochs": 1,
-        },
-        {
-            "name": "base_mean",
-            "num_layers": 4,
-            "nhead": 8,
-            "dim_ff": 1024,
-            "dropout": 0.1,
-            "lr": 2e-4,
-            "max_len": EMBED_MAX_LEN,
-            "pooling": "mean",
-            "batch_size": 16,
-            "epochs": 1,
-        },
-    ]
-
-    seeds = [42, 43, 44]
-
-    # ---- Run configs x seeds, track best config by mean val
+def run_ablation(configs, seeds):
     all_results = []
     for cfg in configs:
         vals = []
@@ -259,7 +227,7 @@ def main():
         last_vocab = None
         last_device = None
 
-        print(f"\n###############################\nCONFIG: {cfg['name']}\n###############################")
+        print(f"\n============================\nCONFIG: {cfg['name']}\n============================")
         for s in seeds:
             best_val, best_path, vocab, device = train_one_run(cfg, s)
             vals.append(best_val)
@@ -269,7 +237,7 @@ def main():
 
         mean = float(np.mean(vals))
         std = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
-        print(f"\nRESULT {cfg['name']}: mean_best_val={mean:.4f} std={std:.4f} vals={[round(v,4) for v in vals]}\n")
+        print(f"\nRESULT {cfg['name']}: mean={mean:.4f} std={std:.4f} vals={[round(v,4) for v in vals]}")
 
         all_results.append({
             "name": cfg["name"],
@@ -282,27 +250,102 @@ def main():
             "device": last_device,
         })
 
-    # Choose best config by mean val
-    best_cfg_res = max(all_results, key=lambda r: r["mean"])
-    print("\n===============================")
-    print("BEST CONFIG BY MEAN VAL:", best_cfg_res["name"])
-    print("mean:", best_cfg_res["mean"], "std:", best_cfg_res["std"], "vals:", best_cfg_res["vals"])
-    print("===============================\n")
+        # Choose best config by mean val
+        best_cfg_res = max(all_results, key=lambda r: r["mean"])
+        print("\n===============================")
+        print("BEST CONFIG BY MEAN VAL:", best_cfg_res["name"])
+        print("mean:", best_cfg_res["mean"], "std:", best_cfg_res["std"], "vals:", best_cfg_res["vals"])
+        print("===============================\n")
 
-    # Use the best checkpoint from the best-performing SEED run for that config
-    # (pick seed index with max val)
-    best_seed_idx = int(np.argmax(best_cfg_res["vals"]))
-    best_path = best_cfg_res["best_paths"][best_seed_idx]
+        # Use the best checkpoint from the best-performing SEED run for that config
+        # (pick seed index with max val)
+        best_seed_idx = int(np.argmax(best_cfg_res["vals"]))
+        best_path = best_cfg_res["best_paths"][best_seed_idx]
 
-    out_csv = f"AppliedML_Group8/submission/scratch_transformer_submission_{best_cfg_res['name']}.csv"
-    write_submission(
-        best_path=best_path,
-        vocab=best_cfg_res["vocab"],
-        device=best_cfg_res["device"],
-        out_csv=out_csv,
-        max_len=best_cfg_res["config"]["max_len"],
-    )
+
+    return best_cfg_res, best_path
+
+def run_single_config(config, seed=42):
+    print(f"\n=== Running config {config['name']} with seed {seed} ===")
+    best_val, best_path, vocab, device = train_one_run(config, seed)
+    print(f"\nFinished {config['name']}: best_val={best_val:.4f}")
+    return best_val, best_path, vocab, device
+
+def main():
+
+    # ------------ DEFINE CONFIGS -------------
+    base_cls = {
+        "name": "base_cls",
+        "num_layers": 4,
+        "nhead": 8,
+        "dim_ff": 1024,
+        "dropout": 0.1,
+        "lr": 2e-4,
+        "max_len": EMBED_MAX_LEN,
+        "pooling": "cls",
+        "batch_size": 16,
+        "epochs": 1,
+    }
+
+    base_mean = {
+        "name": "base_mean",
+        "num_layers": 4,
+        "nhead": 8,
+        "dim_ff": 1024,
+        "dropout": 0.1,
+        "lr": 2e-4,
+        "max_len": EMBED_MAX_LEN,
+        "pooling": "mean",
+        "batch_size": 16,
+        "epochs": 1,
+    }
+
+    # ------------ CHOOSE MODE -------------
+    # MODE = "ablation"
+    MODE = "single"   # <-- change this for hyperparameter tuning
+
+    if MODE == "ablation":
+        configs = [base_cls, base_mean]
+        seeds = [42, 43, 44]
+        best_cfg, best_path = run_ablation(configs, seeds)
+
+        # generate submission:
+        write_submission(best_path, best_cfg["vocab"], best_cfg["device"],
+                         out_csv=f"submission/scratch_transformer_{best_cfg['name']}.csv",
+                         max_len=best_cfg["config"]["max_len"])
+
+    elif MODE == "single":
+
+        # hyperparameter tuning config
+        tune_cfg = {
+        "name": "tune_cfg",
+        "num_layers": 4,
+        "nhead": 8,
+        "dim_ff": 1024,
+        "dropout": 0.1,
+        "lr": 1e-4,
+        "max_len": EMBED_MAX_LEN,
+        "pooling": "mean",
+        "batch_size": 16,
+        "epochs": 10,
+        }
+
+        best_val, best_path, vocab, device = run_single_config(tune_cfg, seed=43)
+
+        print(f"\nFinished {tune_cfg['name']} | best_val={best_val:.4f}")
+
+        out_csv = f"submission/{tune_cfg['name']}.csv"
+        write_submission(
+            best_path=best_path,
+            vocab=vocab,
+            device=device,
+            out_csv=out_csv,
+            max_len=tune_cfg["max_len"],
+        )
+
+        print(f"\nSaved submission -> {out_csv}\n")
 
 
 if __name__ == "__main__":
     main()
+
