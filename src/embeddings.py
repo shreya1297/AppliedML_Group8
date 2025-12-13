@@ -12,7 +12,7 @@ import torch
 import torch.nn as nn
 
 # Import embedding configuration
-from src.config import (
+from config import (
     EMBED_D_MODEL,
     EMBED_MAX_LEN,
     EMBED_DROPOUT,

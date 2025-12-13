@@ -1,6 +1,6 @@
 import torch
-from src.embeddings import InputEmbedding
-from src.config import EMBED_D_MODEL, EMBED_MAX_LEN
+from embeddings import InputEmbedding
+from config import EMBED_D_MODEL, EMBED_MAX_LEN
 
 # ----------------------------
 # Fake setup

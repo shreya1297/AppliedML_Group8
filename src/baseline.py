@@ -23,13 +23,13 @@ def get_device():
     """
     if torch.backends.mps.is_available():
         device = torch.device("mps")
-        print("✅ Using Mac GPU (MPS)")
+        print("Using Mac GPU (MPS)")
     elif torch.cuda.is_available():
         device = torch.device("cuda")
-        print("✅ Using CUDA GPU")
+        print("Using CUDA GPU")
     else:
         device = torch.device("cpu")
-        print("⚠️ Using CPU")
+        print("X Using CPU")
     print(f"Device: {device}")
     return device
 
@@ -124,17 +124,17 @@ def main():
     get_device()  # just to print / confirm; Trainer picks it up automatically
 
     # --- 1. Load & Split Data ---
-    print(f"📂 Loading training data from {args.train_path} ...")
+    print(f"Loading training data from {args.train_path} ...")
     df = load_data(args.train_path)
 
-    print("🔀 Performing stratified train/validation split ...")
+    print("Performing stratified train/validation split ...")
     train_dataset, eval_dataset = split_dataset(df, test_size=args.val_size)
 
     # --- 2. Tokenizer & Preprocessing ---
-    print(f"🔧 Loading tokenizer and model from {args.model_name_or_path} ...")
+    print(f"Loading tokenizer and model from {args.model_name_or_path} ...")
     tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
-    print("🧪 Tokenizing train and validation datasets ...")
+    print("Tokenizing train and validation datasets ...")
     encoded_train = train_dataset.map(
         lambda batch: preprocess_mc_batch(
             batch, tokenizer=tokenizer, max_length=args.max_length
@@ -194,16 +194,16 @@ def main():
     )
 
     # --- 7. Train ---
-    print("🚀 Starting training of the baseline model ...")
+    print("Starting training of the baseline model ...")
     trainer.train()
 
     # --- 8. Final Evaluation ---
-    print("\n📊 Evaluating on validation set ...")
+    print("\n Evaluating on validation set ...")
     metrics = trainer.evaluate()
     print(f"Final Validation Accuracy: {metrics.get('eval_accuracy', 0.0):.2%}")
 
     # --- 9. Save Best Model & Tokenizer ---
-    print(f"\n💾 Saving best model and tokenizer to {args.output_dir} ...")
+    print(f"\n Saving best model and tokenizer to {args.output_dir} ...")
     trainer.save_model(args.output_dir)
     tokenizer.save_pretrained(args.output_dir)
     print("Baseline training complete.")

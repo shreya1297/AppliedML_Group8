@@ -23,9 +23,9 @@ EMBED_DROPOUT = 0.1
 
 
 # Data paths
-TRAIN_CSV = "data/train.csv"
-TEST_CSV = "data/test.csv"
-SAMPLE_SUBMISSION_CSV = "data/sample_submission.csv"
+TRAIN_CSV = "AppliedML_Group8/data/train.csv"
+TEST_CSV = "AppliedML_Group8/data/test.csv"
+SAMPLE_SUBMISSION_CSV = "AppliedML_Group8/data/sample_submission.csv"
 
 # Model save dir
 MODEL_DIR = "models/custom/"

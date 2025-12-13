@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import torch
+import os
 
 from datasets import Dataset
 from transformers import (
@@ -25,13 +26,13 @@ def get_device():
     """
     if torch.backends.mps.is_available():
         device = torch.device("mps")
-        print("✅ Using Mac GPU (MPS)")
+        print("Using Mac GPU (MPS)")
     elif torch.cuda.is_available():
         device = torch.device("cuda")
-        print("✅ Using CUDA GPU")
+        print("Using CUDA GPU")
     else:
         device = torch.device("cpu")
-        print("⚠️ Using CPU")
+        print("X Using CPU")
     print(f"Device: {device}")
     return device
 
@@ -62,7 +63,7 @@ def parse_args():
     parser.add_argument(
         "--max_length",
         type=int,
-        default=256,  # ⚠️ Must match the max_length used during training
+        default=256,  # X Must match the max_length used during training
         help="Maximum sequence length for tokenization (must match training).",
     )
     parser.add_argument(
@@ -87,7 +88,7 @@ def main():
     get_device()  # Just prints; Trainer uses the appropriate device automatically
 
     # --- 1. Load Test Data ---
-    print(f"📂 Loading test data from {args.test_path} ...")
+    print(f"Loading test data from {args.test_path} ...")
     # Reuse load_data so 'answers' is parsed with ast.literal_eval
     test_df = load_data(args.test_path)
 
@@ -100,12 +101,12 @@ def main():
     test_dataset = Dataset.from_pandas(test_df)
 
     # --- 2. Load Model & Tokenizer ---
-    print(f"🔧 Loading model and tokenizer from {args.model_path} ...")
+    print(f"Loading model and tokenizer from {args.model_path} ...")
     try:
         tokenizer = AutoTokenizer.from_pretrained(args.model_path)
         model = AutoModelForMultipleChoice.from_pretrained(args.model_path)
     except OSError:
-        print(f"❌ Error: Could not load model/tokenizer from '{args.model_path}'.")
+        print(f"X Error: Could not load model/tokenizer from '{args.model_path}'.")
         print("   Make sure you have trained and saved the baseline model (baseline.py).")
         return
 
@@ -116,7 +117,7 @@ def main():
     use_fp16 = torch.cuda.is_available() and not torch.backends.mps.is_available()
 
     # --- 3. Preprocessing (must match training logic) ---
-    print("🧪 Tokenizing test dataset ...")
+    print("Tokenizing test dataset ...")
     encoded_test = test_dataset.map(
         lambda batch: preprocess_mc_batch(
             batch, tokenizer=tokenizer, max_length=args.max_length
@@ -144,7 +145,7 @@ def main():
     )
 
     # --- 5. Run Predictions ---
-    print("🔮 Running predictions on test set ...")
+    print("Running predictions on test set ...")
     predictions = trainer.predict(encoded_test)
 
     # predictions.predictions: [num_examples, 4] logits → take argmax
@@ -164,10 +165,16 @@ def main():
         }
     )
 
-    print(f"💾 Saving submission to {args.output_file} ...")
+    print(f"Saving submission to {args.output_file} ...")
+
+    # Ensure output directory exists
+    output_dir = os.path.dirname(args.output_file)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+
     submission_df.to_csv(args.output_file, index=False)
 
-    print("✅ Submission file created.")
+    print("Submission file created.")
     print(submission_df.head())
 
 
