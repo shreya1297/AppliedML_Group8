@@ -1,0 +1,254 @@
+{
+  "checkpoint": "models/best.pt",
+  "config": {
+    "name": "tune_cfg",
+    "num_layers": 4,
+    "nhead": 8,
+    "dim_ff": 1024,
+    "dropout": 0.1,
+    "lr": 0.0001,
+    "max_len": 256,
+    "pooling": "mean",
+    "batch_size": 16,
+    "epochs": 10
+  },
+  "accuracy": 0.3081896551724138,
+  "class_accuracies": {
+    "0": 0.3247863247863248,
+    "1": 0.29914529914529914,
+    "2": 0.28448275862068967,
+    "3": 0.32456140350877194
+  },
+  "confidence_correct": 0.45484572649002075,
+  "confidence_incorrect": 0.4555554687976837,
+  "avg_context_length_correct": 67.1118881118881,
+  "avg_context_length_incorrect": 64.79127725856698,
+  "confusion_matrix": [
+    [
+      38,
+      25,
+      26,
+      28
+    ],
+    [
+      27,
+      35,
+      29,
+      26
+    ],
+    [
+      30,
+      31,
+      33,
+      22
+    ],
+    [
+      29,
+      27,
+      21,
+      37
+    ]
+  ],
+  "worst_examples": [
+    {
+      "id": "train_2443",
+      "context": "Vitamin XYZ has long been a favorite among health food enthusiasts. In a recent large study, those who took large amounts of vitamin XYZ daily for two years showed on average a 40 percent lower risk of heart disease than did members of a control group. Researchers corrected for differences in relevant health habits such as diet.",
+      "question": "Which one of the following inferences is most supported by the passage?",
+      "answers": [
+        "Taking large amounts of vitamin XYZ daily over the course of one's adult life should be recommended to most adults.",
+        "Health food enthusiasts are probably correct in believing that large daily doses of multiple vitamins promote good health.",
+        "Those who take large doses of vitamin XYZ daily for the next two years will exhibit on average an increase in the likelihood of avoiding heart disease.",
+        "Taking large amounts of vitamins is probably worth risking the side effects."
+      ],
+      "true_label": 2,
+      "predicted_label": 3,
+      "confidence": 0.8204935789108276,
+      "probabilities": [
+        0.011772939004004002,
+        0.07057451456785202,
+        0.09715896844863892,
+        0.8204935789108276
+      ]
+    },
+    {
+      "id": "train_1648",
+      "context": "Most plants have developed chemical defenses against parasites. The average plant contains about 40 natural pesticides -- chemical compounds toxic to bacteria, fungi, and other parasites. Humans ingest these natural pesticides without harm every day. Ttherefore, the additional threat posed by synthetic pesticides sprayed on crop plants by humans is minimal.",
+      "question": "Each of the following, if true, weakens the argument EXCEPT:",
+      "answers": [
+        "The synthetic pesticides sprayed on crop plants by humans usually have chemical structures similar to those of the natural pesticides produced by the plants.",
+        "Natural plant pesticides generally serve only as defenses against specific parasites, whereas synthetic pesticides are often harmful to a wide variety of organisms.",
+        "The concentrations of natural pesticides in plants are typically much lower than the concentrations of synthetic pesticides in sprayed crop plants.",
+        "Natural plant pesticides are typically less potent than synthetic pesticides, whose toxicity is highly concentrated."
+      ],
+      "true_label": 0,
+      "predicted_label": 3,
+      "confidence": 0.7933059334754944,
+      "probabilities": [
+        0.06111001968383789,
+        0.037637773901224136,
+        0.1079462468624115,
+        0.7933059334754944
+      ]
+    },
+    {
+      "id": "train_1629",
+      "context": "Every fall Croton' s jays migrate south. The jays always join flocks of migrating crookbeaks with which they share the same summer and winter territories. If a jay becomes separated from the crookbeaks it is accompanying, it wanders until it comes across another flock of crookbeaks. Clearly, ttherefore, Croton' s jays lack the navigational ability to find their way south on their own.",
+      "question": "Which of the following, if true, most strengthens the argument?",
+      "answers": [
+        "Croton's jays lay their eggs in the nests of crookbeaks which breed upon completing their southern migration",
+        "Species other than Croton's jays occasionally accompany flocks of migrating crookbeaks",
+        "The three species most closely related to crookbeaks do not migrate at all",
+        "In the spring, Croton's jays migrate north in the company of Tattersall warblers"
+      ],
+      "true_label": 3,
+      "predicted_label": 0,
+      "confidence": 0.7804363965988159,
+      "probabilities": [
+        0.7804363965988159,
+        0.036645203828811646,
+        0.09857665002346039,
+        0.08434178680181503
+      ]
+    },
+    {
+      "id": "train_412",
+      "context": "First-time computer buyers buying PXC home computers typically buy models that cost much less and have a smaller profit margin per computer than do PXC computers bought by people replacing their computers with more powerful models. Last year PXC' s profits from computer sales were substantially higher than the previous year, although about the same number of PXC computers were sold and the prices and profit margins for each computer model that PXC sells remained unchanged.",
+      "question": "If the statements above are true, which of the following is most strongly supported by them?",
+      "answers": [
+        "The number of people buying PXC computers who also bought PXC computer-related products, such as printers, was larger last year than the previous year.",
+        "PXC's production costs for its computers were lower last year than they had been the previous year.",
+        "The proportion of PXC computers bought by first-time computer buyers was smaller last year than the previous year.",
+        "Among computer buyers who bought a PXC computer to replace their existing computer, the proportion who were replacing a computer made by a competitor of PXC was greater last year than the previous year."
+      ],
+      "true_label": 2,
+      "predicted_label": 3,
+      "confidence": 0.7801735401153564,
+      "probabilities": [
+        0.042976014316082,
+        0.07058831304311752,
+        0.10626208782196045,
+        0.7801735401153564
+      ]
+    },
+    {
+      "id": "train_3480",
+      "context": "People who listen to certain recordings of music are in danger of being unduly influenced by spoken messages that have been recorded backwards on the records or tapes.",
+      "question": "A consequence of the view above is that",
+      "answers": [
+        "backwards messages can be added to a recording while still preserving all the musical qualities of the recorded performance",
+        "the recordings on which such messages appear are chosen for this purpose either because they are especially popular or because they induce a trancelike state",
+        "when people listen to recorded music, they pay full attention to the music as it plays",
+        "if such messages must be comprehended to exert influence, then people must be able to comprehend spoken messages recorded backwards"
+      ],
+      "true_label": 3,
+      "predicted_label": 1,
+      "confidence": 0.7593222260475159,
+      "probabilities": [
+        0.04312296584248543,
+        0.7593222260475159,
+        0.0342140756547451,
+        0.1633407175540924
+      ]
+    },
+    {
+      "id": "train_3276",
+      "context": "A recent study shows that those highways that carry the most traffic, and thus tend to be the most congested, have the lowest rate of fatal traffic accidents.",
+      "question": "Which one of the following, if true, most helps to explain the phenomenon described above?",
+      "answers": [
+        "Most of the motorists on very heavily traveled highways tend to be commuting to or from work.",
+        "Most serious accidents occur when vehicles are moving at a high rate of speed.",
+        "Drivers have more accidents when they become distracted.",
+        "The highways that have the highest rate of fatal accidents have moderate volumes of traffic."
+      ],
+      "true_label": 1,
+      "predicted_label": 0,
+      "confidence": 0.7461407780647278,
+      "probabilities": [
+        0.7461407780647278,
+        0.08150945603847504,
+        0.00820018257945776,
+        0.16414958238601685
+      ]
+    },
+    {
+      "id": "train_4138",
+      "context": "A certain type of shrimp habitually hovers around superheated deep-sea geysers, near which the bacteria that form the shrimps' diet can be found, Because the geysers emit a faint light, scientists have concluded that the shrimps' light sensitive dorsal patches were developed to locate the geysers and thereby find food.",
+      "question": "Which of the following, if true, casts the most doubt on the scientists' conclusion?",
+      "answers": [
+        "The light given off by the geysers too faint to be detected by the human eye",
+        "In other types of shrimp, a heat-seasing organ has developed that could serve the same geyser-detecting purposes as the light sensitive patches are said to serve.",
+        "The light to which the shrimps are sensitive is not the sort of light that the geysers emit",
+        "The heat inside a geyser's stream is sufficient to kill instantly any bacteria that move into it"
+      ],
+      "true_label": 2,
+      "predicted_label": 3,
+      "confidence": 0.7364867329597473,
+      "probabilities": [
+        0.14274917542934418,
+        0.05630487948656082,
+        0.06445927917957306,
+        0.7364867329597473
+      ]
+    },
+    {
+      "id": "train_3668",
+      "context": "TV meteorologist: Our station' s weather forecasts are more useful and reliable than those of the most popular news station in the area. After all, the most important question for viewers in this area is whether it will rain, and on most of the occasions when we have forecast rain for the next day, we have been right. The same cannot be said for either of our competitors.",
+      "question": "Which one of the following, if true, most strengthens the meteorologist's argument?",
+      "answers": [
+        "On most of the occasions when the meteorologist's station forecast that it would not rain, at least one of its competitors also forecast that it would not rain.",
+        "The meteorologist's station forecast rain more often than did the most popular news station in the area.",
+        "The meteorologist's station has a policy of not making weather forecasts more than three days in advance.",
+        "The most popular news station in the area is popular because of its investigative news reports."
+      ],
+      "true_label": 1,
+      "predicted_label": 0,
+      "confidence": 0.7266729474067688,
+      "probabilities": [
+        0.7266729474067688,
+        0.0712694600224495,
+        0.13939927518367767,
+        0.06265835464000702
+      ]
+    },
+    {
+      "id": "train_3509",
+      "context": "A student has taken twelve courses and received a B in a majority of them. The student is now taking another course and will probably, given her record, receive a B in it.",
+      "question": "Each of the following, if true, strengthens the argument EXCEPT:",
+      "answers": [
+        "The student previously studied alone but is receiving help from several outstanding students during the present course.",
+        "The current course is a continuation of one of the twelve courses in which the student received a B.",
+        "The student previously studied in the library and continues to do so.",
+        "The student received a B in all but one of the twelve courses."
+      ],
+      "true_label": 0,
+      "predicted_label": 1,
+      "confidence": 0.7230863571166992,
+      "probabilities": [
+        0.2222951352596283,
+        0.7230863571166992,
+        0.029381873086094856,
+        0.02523665316402912
+      ]
+    },
+    {
+      "id": "train_443",
+      "context": "Which one of the following exhibits both of the logical flaws exhibited in the argument above?",
+      "question": "All intelligent people are nearsighted. I am very nearsighted. So I must be a genius.",
+      "answers": [
+        "All chickens have beaks. This bird has a beak. So this bird must be a chicken.",
+        "All pigs have four legs, but this spider has eight legs. So this spider must be twice as big as any pig.",
+        "John is extremely happy, so he must be extremely tall because all tall people are happy.",
+        "I must be stupid because all intelligent people are nearsighted and I have perfect eyesight."
+      ],
+      "true_label": 2,
+      "predicted_label": 1,
+      "confidence": 0.7214517593383789,
+      "probabilities": [
+        0.20675066113471985,
+        0.7214517593383789,
+        0.04071534425020218,
+        0.03108229674398899
+      ]
+    }
+  ]
+}
